@@ -973,7 +973,7 @@ A [material design implementation of a data table](https://www.google.com/design
 				},
 
 				_getByKey: function(key){
-					if(key === null){
+					if(key === undefined || key === null){
 						return null;
 					}
 					if(typeof key === 'object'){
