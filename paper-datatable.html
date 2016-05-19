@@ -525,9 +525,13 @@ A [material design implementation of a data table](https://www.google.com/design
 					});
 				},
 
-				_setRowKeys: function(){
+				_setRowKeys: function(splices){
 					var rowKeys = [];
 					this._dataKeyCollection = Polymer.Collection.get(this.data);
+					if (splices) {
+						// ensure no lingering indices exist that point to removed elements
+						Polymer.Collection.applySplices(this.data, splices);
+					}
 					this.data.forEach(function(row){
 						var key = this._dataKeyCollection.getKey(row);
 						if('filter' in this){
@@ -838,6 +842,28 @@ A [material design implementation of a data table](https://www.google.com/design
 							}
 						}
 					}
+				},
+
+				/**
+				 * Removes all selected elements from the dataset and the view
+				 */
+				removeSelectedRows: function () {
+					var i = 0, key=null;
+					for (i; i < this.selectedKeys.length; ++i) {
+						key = this.selectedKeys[i];
+						this.splice('selectedKeys', i--, 1);
+						this._removeRowAtKey(key);
+					}
+				},
+
+				removeSelectedRow: function () {
+					this._removeRowAtKey(this.selectedKey);
+					this.set('selectedKey', null);
+				},
+
+				_removeRowAtKey: function(key) {
+					var obj = this._getByKey(key);
+					this.splice('data', this.data.indexOf(obj), 1);
 				},
 
 				/**
