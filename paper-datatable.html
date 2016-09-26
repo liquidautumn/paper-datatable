@@ -628,7 +628,8 @@ A [material design implementation of a data table](https://www.google.com/design
 										);
 										cell.instance = instance;
 										cell.instanceType = 'inline';
-										cell.querySelector('span').innerHTML = '';
+										cell.querySelector('span').remove();
+										cell.appendChild(document.createElement('span'));
 										cell.querySelector('span').appendChild(instance.root);
 									}else{
 										if(cell.instance)
